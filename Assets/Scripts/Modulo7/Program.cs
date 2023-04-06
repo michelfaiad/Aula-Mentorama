@@ -9,11 +9,11 @@ public class Program : MonoBehaviour
 	{
 		var sword = new Weapon("Sword", 8);
 		var plate = new Armor("Breast Plate", 3);
-		_player1 = new Character("Lex", 100, sword, plate);
+		_player1 = new Orc("Growl", 100, sword, plate);
 
 		var dagger = new Weapon("Dagger", 6);
 		var complete = new Armor("Complete Armor", 6);
-		_player2 = new Character("Ana", 90, dagger, complete);
+		_player2 = new Elf("Ana", 90, dagger, complete);
 	}
 
 	void Update()
@@ -42,6 +42,10 @@ public class Program : MonoBehaviour
 		{
 			_player1.EquipArmor(new Armor("Armadura", Random.Range(1, 5)));
 		}
+		if (Input.GetKeyDown(KeyCode.Alpha7))
+		{
+			_player1.Provoke();
+		}
 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
@@ -66,6 +70,10 @@ public class Program : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Y))
 		{
 			_player2.EquipArmor(new Armor("Armadura", Random.Range(1, 5)));
+		}
+		if (Input.GetKeyDown(KeyCode.U))
+		{
+			_player2.Provoke();
 		}
 	}
 }

@@ -7,7 +7,12 @@ public class Character
 	public Weapon Weapon { get; private set; }
 	public Armor Armor { get; private set; }
 
-	public bool IsAlive { get => Life > 0; }
+	public bool IsAlive => Life > 0;
+
+	public virtual void Provoke()
+	{
+		Debug.Log($"{Name} provoca seu inimigo com uma careta.");
+	}
 
 	public Character(string name, int life, Weapon weapon, Armor armor)
 	{
