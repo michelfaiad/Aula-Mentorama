@@ -25,28 +25,8 @@ public class ProgramView : MonoBehaviour
 
 	void Start()
 	{
-		program.OnStartGame += StartGameEventHandler;
 		program.OnPlayer1StatusChange += Player1StatusChangeEventHandler;
 		program.OnPlayer2StatusChange += Player2StatusChangeEventHandler;
-	}
-
-	private void StartGameEventHandler(Character player1, Character player2)
-	{
-		p1Name.text = $"Name: {player1.Name}";
-		p1Weapon.text = $"Weapon: {player1.Weapon.Name}";
-		p1Damage.text = $"Damage: {player1.Weapon.Damage}";
-		p1Armor.text = $"Armor: {player1.Armor.Name}";
-		p1Resistance.text = $"Resistance: {player1.Armor.Resistance}";
-		p1Life.text = $"Life: {player1.Life}";
-		p1Alive.text = "Alive";
-
-		p2Name.text = $"Name: {player2.Name}";
-		p2Weapon.text = $"Weapon: {player2.Weapon.Name}";
-		p2Damage.text = $"Damage: {player2.Weapon.Damage}";
-		p2Armor.text = $"Armor: {player2.Armor.Name}";
-		p2Resistance.text = $"Resistance: {player2.Armor.Resistance}";
-		p2Life.text = $"Life: {player2.Life}";
-		p2Alive.text = "Alive";
 	}
 
 	private void Player1StatusChangeEventHandler(Character player)
