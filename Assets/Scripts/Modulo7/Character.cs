@@ -109,7 +109,7 @@ public class Character
 			return;
 		}
 
-		Life -= ammount;
+		Life = Mathf.Clamp(Life - ammount, 0, Life);
 
 		Debug.Log($"{Name} tomou {ammount} de dano.\n" +
 			$"Vida atual de {Name}: {Life}");
