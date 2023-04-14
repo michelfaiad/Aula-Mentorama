@@ -2,21 +2,22 @@ using UnityEngine;
 
 public class Patrol : MonoBehaviour
 {
-	private enum PatrolState
+	public enum PatrolState
 	{
 		Idle,
-		PatrollingRight,
-		PatrollingLeft
+		PatrolRight,
+		PatrolLeft,
+		PatrolUp,
+		PatrolDown
 	}
 
 	public Move MoveComponent;
 
 	private PatrolData _patrolData;
 	private PatrolState _patrolState;
-	private PatrolState _lastMoveDirection;
+	private PatrolState _nextPatrolState;
 
 	private float _idleTimer;
-	private float _moveTimer;
 
 	private bool _isPatrolling = false;
 
@@ -26,10 +27,8 @@ public class Patrol : MonoBehaviour
 		_patrolData = patrolData;
 
 		_idleTimer = 0;
-		_moveTimer = 0;
 
-		_patrolState = PatrolState.Idle;
-		_lastMoveDirection = PatrolState.PatrollingLeft;
+		_patrolState = PatrolState.PatrolRight;
 	}
 
 	public void StopPatrolling()
@@ -48,42 +47,59 @@ public class Patrol : MonoBehaviour
 		{
 			default:
 			case PatrolState.Idle:
-				_idleTimer += Time.deltaTime;
 
-				if (_idleTimer >= _patrolData.RestingDuration)
-				{
-					if (_lastMoveDirection == PatrolState.PatrollingLeft)
-					{
-						_patrolState = PatrolState.PatrollingRight;
-						MoveComponent.Direction = Vector3.right;
-					}
-					else
-					{
-						_patrolState = PatrolState.PatrollingLeft;
-						MoveComponent.Direction = Vector3.left;
-					}
-
-					MoveComponent.Speed = _patrolData.MoveSpeed;
-					_idleTimer = 0;
-				}
+				MoveInDirection(Vector3.zero, 0f);
+				IdleRest();
 
 				break;
 
-			case PatrolState.PatrollingRight:
-			case PatrolState.PatrollingLeft:
-				_moveTimer += Time.deltaTime;
+			case PatrolState.PatrolRight:
 
-				if (_moveTimer >= _patrolData.MoveDuration)
-				{
-					_lastMoveDirection = _patrolState;
-					_patrolState = PatrolState.Idle;
-					_moveTimer = 0;
+				MoveInDirection(Vector3.right, _patrolData.MoveSpeed);
 
-					MoveComponent.Speed = 0;
-				}
+				break;
+
+			case PatrolState.PatrolLeft:
+
+				MoveInDirection(Vector3.left, _patrolData.MoveSpeed);
+
+				break;
+
+			case PatrolState.PatrolUp:
+
+				MoveInDirection(Vector3.forward, _patrolData.MoveSpeed);
+
+				break;
+
+			case PatrolState.PatrolDown:
+
+				MoveInDirection(Vector3.back, _patrolData.MoveSpeed);
 
 				break;
 		}
+	}
+
+	private void IdleRest()
+	{
+		_idleTimer += Time.deltaTime;
+
+		if (_idleTimer >= _patrolData.RestingDuration)
+		{
+			_patrolState = _nextPatrolState;
+			_idleTimer = 0;
+		}
+	}
+
+	private void MoveInDirection(Vector3 direction, float speed)
+	{
+		MoveComponent.Direction = direction;
+		MoveComponent.Speed = speed;
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		_patrolState = PatrolState.Idle;
+		_nextPatrolState = other.GetComponent<TriggerController>().GetNewState();
 	}
 
 }

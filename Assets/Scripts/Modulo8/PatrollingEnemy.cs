@@ -5,23 +5,15 @@ public partial class PatrollingEnemy : MonoBehaviour
 	private enum EnemyState
 	{
 		Stopped,
-		Patrolling1,
-		Patrolling2
+		Patrolling
 	}
 
 	public Patrol PatrolComponent;
 
 	[SerializeField]
-	private PatrolData _patrolData1;
-
-	[SerializeField]
-	private PatrolData _patrolData2;
+	private PatrolData _patrolData;
 
 	private EnemyState _currentEnemyState;
-
-	PatrolData currentPatrolData;
-
-	int patrolDataIndex;
 
 	void Start()
 	{
@@ -35,27 +27,15 @@ public partial class PatrollingEnemy : MonoBehaviour
 			default:
 			case EnemyState.Stopped:
 
-				if (Input.GetKeyDown(KeyCode.Alpha1))
+				if (Input.GetKeyDown(KeyCode.Space))
 				{
-					PatrolComponent.StartPatrolling(_patrolData1);
-					_currentEnemyState = EnemyState.Patrolling1;
-				}
-				else if (Input.GetKeyDown(KeyCode.Alpha2))
-				{
-					PatrolComponent.StartPatrolling(_patrolData2);
-					_currentEnemyState = EnemyState.Patrolling2;
+					PatrolComponent.StartPatrolling(_patrolData);
+					_currentEnemyState = EnemyState.Patrolling;
 				}
 
 				break;
 
-			case EnemyState.Patrolling1:
-			case EnemyState.Patrolling2:
-
-				if (Input.GetKeyDown(KeyCode.Space))
-				{
-					PatrolComponent.StopPatrolling();
-					_currentEnemyState = EnemyState.Stopped;
-				}
+			case EnemyState.Patrolling:
 
 				break;
 		}
